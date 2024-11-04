@@ -1,0 +1,25 @@
+{
+  "name": "electronapp",
+  "version": "0.0.1",
+  "description": "dummy app",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx electromon --trace-warnings .",
+    "electron-package": "electron-packager . MyApp --platform=win32 --arch=x64 --out=dist --overwrite",
+    "package-win": "npm run electron-package"
+  },
+  "keywords": [
+    "electron",
+    "react",
+    "django"
+  ],
+  "author": "axolp",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^33.0.2"
+  },
+  "devDependencies": {
+    "electron-packager": "^17.1.2"
+  }
+}

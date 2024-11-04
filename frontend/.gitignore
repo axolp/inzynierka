@@ -1,0 +1,71 @@
+node_modules
+# Ogólne
+node_modules/
+*.log
+*.tmp
+*.temp
+*.lock
+.DS_Store
+.env
+.env.*
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+Thumbs.db
+
+# Electron
+/dist/
+out/
+**/dist/
+**/out/
+*.asar
+*.asar.unpacked
+*.cache/
+*.build/
+
+# Django
+__pycache__/
+db.sqlite3
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+media/
+staticfiles/
+static/
+local_settings.py
+
+# Django - w przypadku używania pipenv lub virtualenv
+*.env
+venv/
+.Python
+pip-selfcheck.json
+
+# React
+build/
+public/static/
+*.cache/
+.cache/
+*.env
+coverage/
+yarn-error.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testy - jeśli używasz Jesta lub Pytest
+coverage/
+jest_cache/
+jest_output/
+*.mocha/
+*.test.js.snap
+.pytest_cache/
+test-results.xml
+
+# Inne narzędzia
+/coverage/
+.eslintcache
+stylelintcache
