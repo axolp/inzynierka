@@ -8,19 +8,22 @@ import { Left } from "./components/Left";
 import { Flashcards } from "./pages/Flashcards";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
+import {UserProvider} from "./components/UserContext"
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/flashcards" element={<Flashcards />} />
-      </Routes>
-    </Router>
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/flashcards" element={<Flashcards />} />
+        </Routes>
+      </Router>
+    </UserProvider>
   </React.StrictMode>
 );
 

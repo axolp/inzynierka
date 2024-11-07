@@ -1,16 +1,45 @@
 import React, { useState } from "react";
 import { Route, Link, useNavigate } from "react-router-dom";
 import "../styles/login.css";
+import {useUser} from "../components/UserContext"
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const {setUserId} = useUser();
   const navigate = useNavigate();
 
-  function handleSubmit() {
-    console.log(email, password);
-    navigate("/flashcards");
-    console.log("dlaczego nie przekierowalem?");
-  }
+
+
+  const handleSubmit = async (e:React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: email,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+      setUserId(data.message)
+      
+
+      if (response.ok) {
+        alert("Zalogowano poprawnie, przekierowuje na flashcards");
+        navigate("/flashcards");
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
 
   return (
     <div>

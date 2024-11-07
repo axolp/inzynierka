@@ -7,9 +7,35 @@ export const Register = () => {
   const [password, setPassword] = useState("");
   const [repassword, setRepassword] = useState("");
 
-  function handleSubmit() {
-    console.log(email, password);
-  }
+  const handleSubmit = async (e:React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: email,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("User created successfully!");
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  
+
   return (
     <div>
       <nav>

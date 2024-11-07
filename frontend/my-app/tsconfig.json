@@ -21,6 +21,7 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "C:/Users/janax/OneDrive/Pulpit/Praca Inżynierska/apex/inzynierka/frontend/electron.d.ts",
+    "src",
   ]
 }
