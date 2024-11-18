@@ -6,10 +6,40 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  function handleSubmit() {
-    console.log(email, password);
-    navigate("/flashcards");
-    console.log("dlaczego nie przekierowalem?");
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault(); // Zapobiega odświeżeniu strony
+
+    try {
+      // Wysyłanie danych do backendu Django
+      const response = await fetch("http://127.0.0.1:8000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+
+      if (response.ok) {
+        // Otrzymanie odpowiedzi JSON z backendu
+        const data = await response.json();
+        console.log("Zalogowano pomyślnie:", data);
+        localStorage.setItem("user_id", data.user_id);
+
+        // Przekierowanie do /flashcards
+        navigate("/flashcards");
+      } else {
+        // Obsługa błędów logowania
+        console.error("Błąd logowania:", response.status);
+        alert("Logowanie nie powiodło się. Sprawdź dane logowania.");
+      }
+    } catch (error) {
+      // Obsługa błędów sieciowych
+      console.error("Błąd sieci:", error);
+      alert("Wystąpił problem z połączeniem z serwerem.");
+    }
   }
 
   return (

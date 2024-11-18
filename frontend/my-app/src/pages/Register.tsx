@@ -1,14 +1,41 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/login.css";
 
 export const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repassword, setRepassword] = useState("");
+  const navigate = useNavigate();
 
-  function handleSubmit() {
-    console.log(email, password);
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Rejestracja pomyślna:", data);
+        navigate("/");
+        alert("Konto zostało utworzone pomyślnie!");
+      } else {
+        const errorData = await response.json();
+        alert(errorData.error || "Rejestracja nie powiodła się.");
+      }
+    } catch (error) {
+      console.error("Błąd rejestracji:", error);
+      alert("Wystąpił problem z połączeniem z serwerem.");
+    }
   }
   return (
     <div>

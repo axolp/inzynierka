@@ -1,0 +1,6 @@
+REGISTER
+    strona sie odswieza bo typ guzika jest ustawiony na submit
+
+LOGIN
+
+FLASHCARDS

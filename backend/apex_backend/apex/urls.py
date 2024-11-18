@@ -6,5 +6,5 @@ urlpatterns = [
     path("login", views.login, name= "login"),
     path("register", views.register, name= "register"),
     path("flashcards", views.flashcards, name= "flashcards"),
-    path("getdata", views.getData, name= "flashcards"),
+    path("updateFlashcards", views.update_flashcards, name= "updateFlashcards"),
 ]

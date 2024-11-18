@@ -20,6 +20,7 @@
     "electron": "^33.0.2"
   },
   "devDependencies": {
+    "@types/electron": "^1.6.12",
     "electron-packager": "^17.1.2"
   }
 }
