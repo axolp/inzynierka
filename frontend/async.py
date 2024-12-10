@@ -14,19 +14,23 @@ import json
 def ellipse_score(ellipse, prev_center, frame_center):
     (center, axes, angle) = ellipse
     major_axis, minor_axis = max(axes), min(axes)
-    circularity = minor_axis / major_axis  # Ratio close to 1 means more circular
-    distance_to_center = np.sqrt((center[0] - frame_center[0]) ** 2 + (center[1] - frame_center[1]) ** 2)
-    distance_to_prev = np.sqrt((center[0] - prev_center[0]) ** 2 + (center[1] - prev_center[1]) ** 2)
+    circularity = minor_axis / major_axis  
+    distance_to_center = np.sqrt(
+        (center[0] - frame_center[0]) ** 2 + 
+        (center[1] - frame_center[1]) ** 2
+    )
+    distance_to_prev = np.sqrt(
+        (center[0] - prev_center[0]) ** 2 + 
+        (center[1] - prev_center[1]) ** 2
+    )
     
-    # Area calculation (approximating the ellipse area)
     area = np.pi * (major_axis / 2) * (minor_axis / 2)
 
-    # Score calculation with area reward
     score = (
-        -distance_to_center            # Closer to the frame center is better
-        -distance_to_prev              # Closer to the previous position is better
-        + circularity * 100            # Higher circularity is better
-        + area / 100                   # Reward for larger area
+        -distance_to_center             
+        -distance_to_prev           
+        + circularity * 100             
+        + area / 100                  
     )
     return score, circularity
 
@@ -36,25 +40,38 @@ def get_best_threshold(gray, prev_center, frame_center):
     test_thresholds = [60, 70, 80, 90]
 
     for threshold_value in test_thresholds:
-        _, thresh = cv2.threshold(gray, threshold_value, 255, cv2.THRESH_BINARY_INV)
-        contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        _, thresh = cv2.threshold(
+            gray, 
+            threshold_value, 
+            255, 
+            cv2.THRESH_BINARY_INV
+
+        )
+        contours, _ = cv2.findContours(
+            thresh, 
+            cv2.RETR_TREE, 
+            cv2.CHAIN_APPROX_SIMPLE
+            )
 
         for contour in contours:
             if cv2.contourArea(contour) > 50 and len(contour) >= 5:
                 ellipse = cv2.fitEllipse(contour)
-                score, circularity = ellipse_score(ellipse, prev_center, frame_center)
+                score, circularity = ellipse_score(
+                    ellipse, 
+                    prev_center, 
+                    frame_center
+                )
                 
-                # Check if circular enough and update best score
-                if circularity >= 0.50 and score > best_score:
+                
+                if circularity >= 0.60 and score > best_score:
                     best_score = score
                     best_threshold = threshold_value
     return best_threshold
 
 def weighted_average_ellipse(history):
-    # Weights: previous (70%), second last (25%), third last (5%)
     weights = [0.05, 0.10, 0.85]
     
-    # Initialize weighted sums
+    
     weighted_center_x = 0
     weighted_center_y = 0
     weighted_major_axis = 0
@@ -67,10 +84,9 @@ def weighted_average_ellipse(history):
         weighted_major_axis += axes[0] * weights[i]
         weighted_minor_axis += axes[1] * weights[i]
 
-    # Create the weighted average ellipse
     averaged_center = (weighted_center_x, weighted_center_y)
     averaged_axes = (weighted_major_axis, weighted_minor_axis)
-    averaged_angle = history[-1][2]  # Use the angle of the most recent ellipse
+    averaged_angle = history[-1][2] 
     
     return (averaged_center, averaged_axes, averaged_angle)
 
@@ -92,7 +108,8 @@ def compute_pupil_adjustment_factor(m, u, r, d, l, x, y, m_y):
     else:
         theta = 0  
 
-    adjustment_factor= 1 / ( math.cos(math.radians(phi))**2 * math.cos(math.radians(theta))**2 )
+    adjustment_factor= 1
+    #1 / ( math.cos(math.radians(phi))**2 * math.cos(math.radians(theta))**2 )
 
     return adjustment_factor
 
@@ -164,6 +181,7 @@ def pupil_capture(after_calibration, m, u, r, d, l, m_y):
             if cv2.contourArea(contour) > 50 and len(contour) >= 5:
                 ellipse = cv2.fitEllipse(contour)
                 (center, axes, angle) = ellipse
+        
                 diameter = max(axes)
                 score, circularity = ellipse_score(ellipse, prev_center, frame_center)
                 
@@ -194,11 +212,12 @@ def pupil_capture(after_calibration, m, u, r, d, l, m_y):
                 area = np.pi * (major_axis / 2) * (minor_axis / 2) 
                # print(f"elipse area: {area}")
                 if after_calibration:
-                    area*= compute_pupil_adjustment_factor(m,u,r,d,l, averaged_ellipse[0][0], averaged_ellipse[0][1], m_y)
+                    #area*= compute_pupil_adjustment_factor(m,u,r,d,l, averaged_ellipse[0][0], averaged_ellipse[0][1], m_y)
+                    area = np.pi*(max(minor_axis, major_axis)/2**2)
                     cv2.line(roi, (int(l), int(m_y)), (int(r), int(m_y)), (255, 0, 0), 2)
                     cv2.line(roi, (int(m), int(u)), (int(m), int(d)), (255, 0, 0), 2)
                # print(f"pupil real area: {3.14*((max(minor_axis, major_axis)/2)**2)}{area}")
-                area_history.append(3.14*((max(minor_axis, major_axis)/2)**2))
+                area_history.append(area)
            
                # print(f"Averaged Ellipse - Center: {averaged_ellipse[0]}, Axes: {averaged_ellipse[1]}, Angle: {averaged_ellipse[2]}, Area: {area}")
             else:
@@ -214,8 +233,8 @@ def pupil_capture(after_calibration, m, u, r, d, l, m_y):
                 prev_center = best_ellipse[0]
                 # Calculate area for the best ellipse
                 major_axis, minor_axis = best_ellipse[1]
-                area = np.pi * (major_axis / 2) * (minor_axis / 2) 
-                area_history.append(3.14*((max(minor_axis, major_axis)/2)**2))
+                area = np.pi*(max(minor_axis, major_axis)/2**2)
+                area_history.append(area)
                # print("real area:", area)
                 #print(f"Best Ellipse - Center: {best_ellipse[0]}, Axes: {best_ellipse[1]}, Angle: {best_ellipse[2]}, Area: {area}")
 
@@ -232,7 +251,7 @@ def pupil_capture(after_calibration, m, u, r, d, l, m_y):
                 #cv2.imwrite(filename, roi)
                 
                 area_history.pop(0)
-                print(json.dumps({"slope":slope, "timestamp": timestamp}))
+                print(json.dumps({"area":area,"slope":slope, "timestamp": timestamp}), flush=True)
 
         cv2.imshow("Thresholded Image (Pupil Detection)", thresh)
         cv2.imshow("ROI with Detected Ellipse", roi)
@@ -270,23 +289,11 @@ def clasterization(data):
     return l, m, r
 
 def calibration():
-    # Placeholder for asynchronous calibration logic
-    #TAK NAPRAWDE NIE POTRZEBUJE KLASTERYCACJI MOGE SORTOWAC I WYBRAX MAX MEAN MIDDLE ITP
     print("CALIBRATION")
     print("please look straight to the camera, as far left as you can, as far up as you can, as far right as you can, as far down as you can")
     x, y= pupil_capture(False, None, None, None, None, None, None)
     l, m, r = clasterization(x)
     u, m_y, d= clasterization(y)
-   
-    print(l, m, r)
-
-    print(u)
-    print(m_y)
-    print(d)
-
-    #print("korekta")
-    #print(compute_pupil_adjustment_factor(m,u,r,d,l,x[0],y[0],m_y))
-
     return m, u, r, d, l, m_y
 
 def main():

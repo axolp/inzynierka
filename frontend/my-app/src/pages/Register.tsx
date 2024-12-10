@@ -39,11 +39,7 @@ export const Register = () => {
   }
   return (
     <div>
-      <nav>
-        <a href="#">
-          <img src="images/logo.svg" alt="logo" />
-        </a>
-      </nav>
+      <nav></nav>
       <div className="form-wrapper">
         <h2>Register</h2>
         <form>
@@ -54,7 +50,7 @@ export const Register = () => {
               onChange={(event) => setEmail(event.target.value)}
               required
             />
-            <label>Email or phone number</label>
+            <label>Email</label>
           </div>
           <div className="form-control">
             <input

@@ -21,8 +21,6 @@ def update_flashcards(request):
     user_grade= data.get("user_answer") 
     pupil_dilatation= data.get("pupil_dilatation")
 
-    
-
     flashcard= Flashcard.objects.get(id= flashcard_id)
     if not flashcard:
         return JsonResponse(
@@ -43,7 +41,6 @@ def update_flashcards(request):
     flashcard.next_repetition_date= now().date() + timedelta(days= new_interval)
     flashcard.save()
 
-    
     pupil= Pupil.objects.create(
         flashcard= flashcard,
         dilatation= pupil_dilatation,
@@ -51,9 +48,8 @@ def update_flashcards(request):
     )
     pupil.save()
     
-    
     return JsonResponse(
-        {"message":"zaktualizowalem dane albo nie haha"}, status= 200
+        {"message":"zaktualizowalem dane"}, status= 200
         )
 
 

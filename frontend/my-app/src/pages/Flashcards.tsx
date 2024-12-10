@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IpcRendererEvent } from "electron";
+import "../styles/flashcards.css";
 //const { ipcRenderer } = window.require("electron") as typeof import("electron");
 const { ipcRenderer } = window.require("electron");
 const logged_user_id = localStorage.getItem("user_id");
@@ -122,7 +123,6 @@ export const Flashcards = () => {
 
   return (
     <div>
-      STRONA NA FISZKI!!
       {flashcards[flashcardNumber] ? (
         revealFlashcards ? (
           <p>{flashcards[flashcardNumber].meaning}</p>
@@ -132,61 +132,68 @@ export const Flashcards = () => {
       ) : (
         <p>Czekam na fiszki</p>
       )}
-      ;<button onClick={() => setReveal(true)}>sprawdz</button>
-      <button
-        onClick={() => {
-          setReveal(false);
-          setFlashcard_number(flashcardNumber + 1);
-          updateFlashcard("very easy");
-        }}
-      >
-        very easy
-      </button>
-      <button
-        onClick={() => {
-          setReveal(false);
-          setFlashcard_number(flashcardNumber + 1);
-          updateFlashcard("easy");
-        }}
-      >
-        latwe
-      </button>
-      <button
-        onClick={() => {
-          setReveal(false);
-          setFlashcard_number(flashcardNumber + 1);
-          updateFlashcard("medium");
-        }}
-      >
-        srednie
-      </button>
-      <button
-        onClick={() => {
-          setReveal(false);
-          setFlashcard_number(flashcardNumber + 1);
-          updateFlashcard("hard");
-        }}
-      >
-        trudne
-      </button>
-      <button
-        onClick={() => {
-          setReveal(false);
-          setFlashcard_number(flashcardNumber + 1);
-          updateFlashcard("very hard");
-        }}
-      >
-        bardzo trudne
-      </button>
-      <button
-        onClick={() => {
-          setReveal(false);
-          setFlashcard_number(flashcardNumber + 1);
-          updateFlashcard("black out");
-        }}
-      >
-        black out
-      </button>
+      <div className="buttons-container">
+        {!revealFlashcards ? (
+          <button onClick={() => setReveal(true)}>sprawdz</button>
+        ) : (
+          <>
+            <button
+              onClick={() => {
+                setReveal(false);
+                setFlashcard_number(flashcardNumber + 1);
+                updateFlashcard("bardzo łatwe");
+              }}
+            >
+              bardzo łatwe
+            </button>
+            <button
+              onClick={() => {
+                setReveal(false);
+                setFlashcard_number(flashcardNumber + 1);
+                updateFlashcard("easy");
+              }}
+            >
+              latwe
+            </button>
+            <button
+              onClick={() => {
+                setReveal(false);
+                setFlashcard_number(flashcardNumber + 1);
+                updateFlashcard("medium");
+              }}
+            >
+              srednie
+            </button>
+            <button
+              onClick={() => {
+                setReveal(false);
+                setFlashcard_number(flashcardNumber + 1);
+                updateFlashcard("hard");
+              }}
+            >
+              trudne
+            </button>
+            <button
+              onClick={() => {
+                setReveal(false);
+                setFlashcard_number(flashcardNumber + 1);
+                updateFlashcard("very hard");
+              }}
+            >
+              bardzo trudne
+            </button>
+            <button
+              onClick={() => {
+                setReveal(false);
+                setFlashcard_number(flashcardNumber + 1);
+                updateFlashcard("black out");
+              }}
+            >
+              black out
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };

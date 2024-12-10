@@ -1,0 +1,126 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  height: 100%;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0.5;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+}
+
+nav {
+  position: fixed;
+  padding: 25px 60px;
+  z-index: 1;
+}
+
+nav a img {
+  width: 167px;
+}
+p {
+  margin-left: 40%;
+  margin-top: 50px;
+  color: #5a5757;
+  font-size: 5rem;
+  margin-bottom: 20px;
+}
+
+.flashcards-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 4px;
+  padding: 40px;
+  width: 600px;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.75);
+  text-align: center;
+}
+
+.flashcards-wrapper h2 {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.flashcards-wrapper p {
+  font-size: 1.25rem;
+  margin: 20px 0;
+  padding: 20px;
+  background: #333;
+  border-radius: 4px;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+.flashcards-wrapper .buttons-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+
+  position: fixed;
+  bottom: 20px; /* Odstęp od dolnej krawędzi ekranu */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  padding: 10px;
+  margin-left: 100px;
+}
+
+button {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  background: #0a0001;
+  color: #272525;
+  font-weight: 500;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: 0.1s ease;
+  margin-left: 35px;
+}
+button:hover {
+  background: #1b0204;
+}
+
+.flashcards-wrapper :where(label, small) {
+  color: #b3b3b3;
+}
+
+@media (max-width: 740px) {
+  body::before {
+    display: none;
+  }
+
+  nav {
+    padding: 20px;
+  }
+
+  nav a img {
+    width: 140px;
+  }
+
+  .flashcards-wrapper {
+    width: 100%;
+    top: 43%;
+    padding: 20px;
+  }
+}

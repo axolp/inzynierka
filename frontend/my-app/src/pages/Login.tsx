@@ -45,9 +45,7 @@ export const Login = () => {
   return (
     <div>
       <nav>
-        <a href="#">
-          <img src="images/logo.svg" alt="logo" />
-        </a>
+        <a href="#"></a>
       </nav>
       <div className="form-wrapper">
         <h2>Sign In</h2>
